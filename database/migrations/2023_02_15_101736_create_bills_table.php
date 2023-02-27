@@ -22,6 +22,7 @@ class CreateBillsTable extends Migration
             $table->date('Due_date');
             $table->string('Service_name');
             $table->integer('Amount');
+            $table->timestamps();
         });
     }
 

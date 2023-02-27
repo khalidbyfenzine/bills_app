@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('bills/index'); 
-});
+/*Route::get('/', function () {
+    return view('welcome'); 
+});*/
 
-
+Route::get('/', [BillController::class, 'index']);
+Route::delete('/selected-bills',[BillController::class,'deletechecked'])->name('bill.deleteSelected');
 Route::resource('bills', BillController::class);
+Route::resource('supplier', SupplierController::class);
+Route::resource('service', ServiceController::class);

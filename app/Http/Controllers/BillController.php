@@ -14,7 +14,7 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = Bill::latest()->paginate(5);
+        $bills = Bill::paginate(10);
 
         return view('bills.index', compact('bills'))->with(request()->input('page'));
     }
@@ -49,7 +49,15 @@ class BillController extends Controller
 
 
         //create new bill
-        Bill::create($request->all());
+        $bill=new Bill();
+        $bill->Supplier_name=$request->Supplier_name;
+        $bill->Bill_number=$request->Bill_number;
+        $bill->Amount=$request->Amount;
+        $bill->Bill_date=$request->Bill_date;
+        $bill->Deposit_date=$request->Deposit_date;
+        $bill->Due_date= date('Y-m-d', strtotime($request->Bill_date. ' + 90 days'));
+        $bill->Service_name=$request->Service_name;
+        $bill->save();
 
 
         //redirect the user and send friendly msg
@@ -75,7 +83,7 @@ class BillController extends Controller
      */
     public function edit(Bill $bill)
     {
-        //
+        return view('bills.edit',compact('bill'));
     }
 
     /**
@@ -87,7 +95,20 @@ class BillController extends Controller
      */
     public function update(Request $request, Bill $bill)
     {
-        //
+        $request->validate([
+            'Supplier_name' => 'required',
+            'Bill_number' => 'required',
+            'Amount' => 'required',
+            'Bill_date' => 'required',
+            'Deposit_date' => 'required',
+            'Due_date' => 'required',
+            'Service_name' => 'required',
+        ]);
+
+        $bill->update($request->all());
+
+        return redirect()->route('bills.index')
+                        ->with('success','bill updated successfully');
     }
 
     /**
@@ -98,6 +119,17 @@ class BillController extends Controller
      */
     public function destroy(Bill $bill)
     {
-        //
+        $bill->delete();
+
+        return redirect()->route('bills.index')
+                        ->with('success','Product deleted successfully');
+    }
+
+    public function deletechecked(Request $request)
+    {
+        $ids = $request->ids;
+        Bill::whereIn('id',$ids)->delete();
+        return redirect()->route('bills.index')
+                        ->with('success','Product deleted successfully');
     }
 }
