@@ -46,7 +46,7 @@ body {
     margin: 0px 0;
 }
 .table-wrapper {
-	margin: 0 0 10px;
+	margin: 0 0 10ƒpx;
 	background: #435d7d;
 	padding: 20px 25px;
 	border-radius: 3px;
@@ -262,6 +262,47 @@ table.table .avatar {
 	font-weight: normal;
 }	
 </style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"> </script>
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+	$(".delete-bill-form").on("submit", function(e) {
+		e.preventDefault();
+		const form = $(this);
+		Swal.fire({
+			title: "Êtes-vous sûr?",
+			text: "Vous allez supprimer ce utilisateur !",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			showCancelButton: !0,
+			confirmButtonColor: "rgb(23 120 115)",
+			cancelButtonColor: "#f46a6a",
+			cancelButtonText: "annuler",
+			confirmButtonText: "Oui, supprimer-le!",
+		}).then(function(t) {
+			t.value &&
+				$.ajax({
+					type: "POST",
+					url: form.attr("action"),
+					data: form.serialize(), // serializes the form's elements.
+					success: function(data) {
+						Swal.fire(
+							"success!",
+							"Cet utilisateur a été supprimé !",
+						).then(() => {
+							form.parent().remove();
+							location.reload();
+
+						});
+					}
+				});
+		});
+	})
+</script>
 <script>
 	$(document).ready(function(){
 		// Activate tooltip

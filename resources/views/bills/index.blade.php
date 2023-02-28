@@ -65,7 +65,7 @@
                         <td>{{ $bill->Service_name }}</td>
                         <td>{{ $bill->Amount }}</td>
 						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Modifier">&#xE254;</i></a>
+							<a class="edit" data-toggle="modal" data-target="#{{ 'edit-bill-' . $bill->id }}"><i class="material-icons" data-toggle="tooltip" title="Modifier">&#xE254;</i></a>
 							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Supprimer">&#xE872;</i></a>
 						</td>
 					</tr>
@@ -107,7 +107,94 @@
 	});
 </script>
 <!-- Add Modal HTML -->
-					@if ($errors->any())
+@if ($errors->any())
+	<div class="alert alert-danger">
+		<strong>Whoops!</strong> Il y a eu quelques problèmes avec votre entrée.<br><br>
+		<ul>
+			@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+			@endforeach
+		</ul>
+	</div>
+@endif
+@foreach ($bills as $bill)
+<x-bill-edit id="{{ 'edit-bill-' . $bill->id }}" :bill="$bill"/> 
+@endforeach
+
+<!-- Add Supplier Modal HTML -->
+@if ($errors->any())
+<div class="alert alert-danger">
+	<strong>Whoops!</strong> Il y a eu quelques problèmes avec votre entrée.<br><br>
+	<ul>
+		@foreach ($errors->all() as $error)
+			<li>{{ $error }}</li>
+		@endforeach
+	</ul>
+</div>
+@endif
+<div id="addsuppliermodal" class="modal fade">
+<div class="modal-dialog">ƒ
+<div class="modal-content">
+<form action="{{ route('supplier.store') }}" method="POST">
+@csrf
+<div class="modal-header">						
+<h4 class="modal-title">Ajouter Fournisseur</h4>
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+</div>
+<div class="modal-body">
+				
+<div class="form-group">
+<label>Nom de Fournisseur</label>
+<input type="text" name="Supplier_name" class="form-control" required>
+</div>		
+</div>
+<div class="modal-footer">
+<input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+<input type="submit" class="btn btn-success" value="Ajouter">
+</div>
+</form>
+
+</div>
+</div>
+</div>
+<!-- Add Service Modal HTML -->
+@if ($errors->any())
+<div class="alert alert-danger">
+	<strong>Whoops!</strong> Il y a eu quelques problèmes avec votre entrée.<br><br>
+	<ul>
+		@foreach ($errors->all() as $error)
+			<li>{{ $error }}</li>
+		@endforeach
+	</ul>
+</div>
+@endif
+<div id="addservicemodal" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content">
+<form action="{{ route('service.store') }}" method="POST">
+@csrf
+<div class="modal-header">						
+<h4 class="modal-title">Ajouter Service</h4>
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+</div>
+<div class="modal-body">
+				
+<div class="form-group">
+<label>Nom de Service</label>
+<input type="text" name="Service_name" class="form-control" required>
+</div>		
+</div>
+<div class="modal-footer">
+<input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+<input type="submit" class="btn btn-success" value="Ajouter">
+</div>
+</form>
+
+</div>
+</div>
+</div>
+<!-- Edit Modal HTML -->
+@if ($errors->any())
 						<div class="alert alert-danger">
 							<strong>Whoops!</strong> Il y a eu quelques problèmes avec votre entrée.<br><br>
 							<ul>
@@ -117,6 +204,32 @@
 							</ul>
 						</div>
 					@endif
+
+
+<!-- Delete bills HTML -->
+<div id="deletebillsModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form>
+				@csrf
+				@method('DELETE')
+				<div class="modal-header">						
+					<h4 class="modal-title">Supprimer Facture</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<p>Voulez-vous vraiment supprimer ces factures ?</p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+					<input type="submit" class="btn btn-danger" value="Supprimer">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -146,7 +259,7 @@
 					</div>
                     <div class="form-group">
 						<label>Montant</label>
-						<input type="text" name="Amount" class="form-control" required>
+						<input type="number" name="Amount" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>Date Facture</label>
@@ -238,7 +351,7 @@
 				
 <div class="form-group">
 <label>Nom de Service</label>
-<input type="text" name="Bill_number" class="form-control" required>
+<input type="text" name="Service_name" class="form-control" required>
 </div>		
 </div>
 <div class="modal-footer">
@@ -261,76 +374,11 @@
 							</ul>
 						</div>
 					@endif
-<div id="editEmployeeModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form action="{{ route('bills.update',$bill->id) }}" method="POST">
-				@csrf
-				@method('PUT')
-				<div class="modal-header">						
-					<h4 class="modal-title">Modifier Facture</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">					
-					<div class="form-group">
-						<label>Fournisseur</label>
-						<input type="text" value="{{ $bill->Supplier_name }}" name="Supplier_name" class="form-control" required>
-					</div>
-                    <div class="form-group">
-						<label>N°Facture</label>
-						<input type="text" value="{{ $bill->Bill_number }}" name="Bill_number" class="form-control" required>
-					</div>
-                    <div class="form-group">
-						<label>Montant</label>
-						<input type="text" value="{{ $bill->Amount }}" name="Amount" class="form-control" required>
-					</div>
-					<div class="form-group">
-						<label>Date Facture</label>
-						<input type="date" value="{{ $bill->Bill_date }}" class="form-control" name="Bill_date">
-					</div>
-					<div class="form-group">
-						<label>Date Dépot</label>
-						<input type="date" value="{{ $bill->Deposit_date }}" class="form-control" name="Deposit_date">
-					</div>
-					<div class="form-group">
-						<label>Date Echéance</label>
-						<input type="date" value="{{ $bill->Due_date }}" class="form-control" name="Due_date">
-					</div>
-                    <div class="form-group">
-						<label>Service</label>
-						<input type="text" value="{{ $bill->Service_name }}" name="Service_name" class="form-control" required>
-					</div>								
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-info" value="Save">
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form action="{{ route('bills.destroy',$bill->id) }}" method="POST">
-				@csrf
-				@method('DELETE')
-				<div class="modal-header">						
-					<h4 class="modal-title">Supprimer Facture</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">					
-					<p>Voulez-vous vraiment supprimer ces factures ?</p>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
-					<input type="submit" class="btn btn-danger" value="Supprimer">
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+@foreach ($bills as $bill)
+	<x-bill-delete id="{{ 'delete-bill-' . $bill->id }}" :bill="$bill"/> 
+@endforeach
 
 <!-- Delete bills HTML -->
 <div id="deletebillsModal" class="modal fade">
