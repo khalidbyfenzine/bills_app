@@ -66,7 +66,7 @@
                         <td>{{ $bill->Amount }}</td>
 						<td>
 							<a class="edit" data-toggle="modal" data-target="#{{ 'edit-bill-' . $bill->id }}"><i class="material-icons" data-toggle="tooltip" title="Modifier">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Supprimer">&#xE872;</i></a>
+							<a  class="delete" data-toggle="modal" data-target="#{{ 'delete-bill-' . $bill->id }}"><i class="material-icons" data-toggle="tooltip" title="Supprimer">&#xE872;</i></a>
 						</td>
 					</tr>
 					@endforeach
