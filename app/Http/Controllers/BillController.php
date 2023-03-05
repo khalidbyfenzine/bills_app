@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
+use App\Models\Supplier;
+use App\Models\Service;
 use Illuminate\Http\Request;
+use App\Exports\BillsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class BillController extends Controller
 {
@@ -14,9 +19,15 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = Bill::paginate(10);
+        $bills = Bill::paginate(20);
+        $suppliers =  Supplier::all();
+        $services =  Service::all();
+        return view('bills.index', compact('bills','suppliers','services'))->with(request()->input('page'));
+    }
 
-        return view('bills.index', compact('bills'))->with(request()->input('page'));
+    public function export_bill()
+    {
+        return Excel::download(new BillsExport, 'factures.csv');
     }
 
     /**
@@ -131,5 +142,27 @@ class BillController extends Controller
         Bill::whereIn('id',$ids)->delete();
         return redirect()->route('bills.index')
                         ->with('success','Product deleted successfully');
+    }
+    public function search(Request $request)
+    {
+        return ($request->query);
+        $bills = Bill::where('Bill_number','LIKE','%'.$request->query.'%')->get();
+
+        return view('bills.index',compact('bills'));
+    }
+
+    public function search2(Request $request)
+    {
+        $bills = Bill::where([
+            ['Bill_number', '!=', Null],
+            [function ($query) use ($request) {
+                if (($term = $request->term)) {
+                    $query->orWhere('Bill_number', 'LIKE', '%' .$term. '%')->get();
+                }
+            }]
+        ])
+            ->orderBy("id");
+
+            return view('bills.index', compact('bills'));
     }
 }

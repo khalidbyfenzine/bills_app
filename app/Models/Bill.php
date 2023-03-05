@@ -18,4 +18,9 @@ class Bill extends Model
         'Due_date',
         'Service_name'
     ];
+
+    public function Supplier_name()
+    {
+        return $this->hasMany(Bill::class);
+    }
 }

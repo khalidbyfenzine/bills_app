@@ -28,6 +28,10 @@
 
     
 <style>
+p{
+	margin-top: 1rem;
+}
+
 .form-control:focus {
     outline: 0 !important;
     border-color: initial;

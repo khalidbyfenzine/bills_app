@@ -15,18 +15,19 @@
 					<div class="col-sm-9">
 						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter une facture</span></a>
 						<a href="#deletebillsModal" id="deleteAllSelectedItems" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Supprimer</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-info" data-toggle="modal"><i class="material-icons">&#xE8AD;</i> <span>Imprimer</span></a>
-						<div class="input-group col-sm-8">
-								<input class="form-control py-2 border-right-0 border" type="search" value="" id="example-search-input">
+						<a href="{{ route('export_bill') }}" class="btn btn-info"><i class="material-icons">&#xE8AD;</i> <span>Imprimer</span></a>
+						<a href="#addsuppliermodal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter un fournisseur</span></a>
+						<a href="#addservicemodal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter un service</span></a>	
+							<form class="form-inline" method="GET" role="search" >
+								<input class="form-control py-2 border-right-0 border" name="term" type="search" value="" id="example-search-input">
 								<span class="input-group-append">
 									<button class="btn btn-outline-secondary border-left-0 border" type="button">
 										<i class="fa fa-search"></i>
 									</button>
-								  </span>
-							</div>
+								  </span></form>
+							
 						</div>
-						<a href="#addsuppliermodal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter un fournisseur</span></a>
-						<a href="#addservicemodal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter un service</span></a>		
+							
 					</div>
 				</div>
 			</div>
@@ -36,43 +37,8 @@
                 <input type="date" placeholder="To Date" id="post_at_to_date" name="end_date"   value="" class="input-control"  />		 
                 <a href="" class="btn btn-info" data-toggle="modal"><span>Rechercher</span></a>
               </p>
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<th>
-							<input type="checkbox" id="chkcheckall" />
-						</th>
-						<th>N°Facture</th>
-                        <th>Fournisseur</th>
-						<th>Date Facture</th>
-						<th>Date Dépot</th>
-						<th>Date Echéance</th>
-                        <th>Service</th>
-						<th>Montant</th>
-                        <th>Action</th>
-					</tr>
-				</thead>
-				<tbody>@foreach ($bills as $bill)
-					<tr id="sid{{ $bill->id }}">
-						<td>
-						<input type="checkbox" name="ids" class="checkBoxClass" value="{{ $bill->id }}"/>	
-						</td>
-						<td>{{ $bill->Bill_number }}</td>
-						<td>{{ $bill->Supplier_name }}</td>
-						<td>{{ $bill->Bill_date }}</td>
-						<td>{{ $bill->Deposit_date }}</td>
-                        <td>{{ $bill->Due_date }}</td>
-                        <td>{{ $bill->Service_name }}</td>
-                        <td>{{ $bill->Amount }}</td>
-						<td>
-							<a class="edit" data-toggle="modal" data-target="#{{ 'edit-bill-' . $bill->id }}"><i class="material-icons" data-toggle="tooltip" title="Modifier">&#xE254;</i></a>
-							<a  class="delete" data-toggle="modal" data-target="#{{ 'delete-bill-' . $bill->id }}"><i class="material-icons" data-toggle="tooltip" title="Supprimer">&#xE872;</i></a>
-						</td>
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-			{{ $bills->links() }}
+			
+			@include('bills.table',$bills)
 		</div>
 	</div>        
 </div>
@@ -118,7 +84,7 @@
 	</div>
 @endif
 @foreach ($bills as $bill)
-<x-bill-edit id="{{ 'edit-bill-' . $bill->id }}" :bill="$bill"/> 
+<x-bill-edit id="{{ 'edit-bill-' . $bill->id }}" :bill="$bill"  :services="$services"  :suppliers="$suppliers"/> 
 @endforeach
 
 <!-- Add Supplier Modal HTML -->
@@ -146,42 +112,6 @@
 <div class="form-group">
 <label>Nom de Fournisseur</label>
 <input type="text" name="Supplier_name" class="form-control" required>
-</div>		
-</div>
-<div class="modal-footer">
-<input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
-<input type="submit" class="btn btn-success" value="Ajouter">
-</div>
-</form>
-
-</div>
-</div>
-</div>
-<!-- Add Service Modal HTML -->
-@if ($errors->any())
-<div class="alert alert-danger">
-	<strong>Whoops!</strong> Il y a eu quelques problèmes avec votre entrée.<br><br>
-	<ul>
-		@foreach ($errors->all() as $error)
-			<li>{{ $error }}</li>
-		@endforeach
-	</ul>
-</div>
-@endif
-<div id="addservicemodal" class="modal fade">
-<div class="modal-dialog">
-<div class="modal-content">
-<form action="{{ route('service.store') }}" method="POST">
-@csrf
-<div class="modal-header">						
-<h4 class="modal-title">Ajouter Service</h4>
-<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-</div>
-<div class="modal-body">
-				
-<div class="form-group">
-<label>Nom de Service</label>
-<input type="text" name="Service_name" class="form-control" required>
 </div>		
 </div>
 <div class="modal-footer">
@@ -245,12 +175,9 @@
                         <label>Fournisseur</label>
 						<select class="selectpicker" data-width='100%' name="Supplier_name">
                             <option value="">--Sélectionner le fournisseur--</option>
-                            <option value="AAA">AAA</option>
-                            <option value="AAB">AAB</option>
-                            <option value="AAC">AAC</option>
-                            <option value="ABA">ABA</option>
-                            <option value="ABB">ABB</option>
-                            <option value="ABC">ABC</option>
+							@foreach ($suppliers as $supplier)
+								<option value="{{$supplier->id}}">{{$supplier->Supplier_name}}</option>								
+							@endforeach
                         </select>                        
 					</div>
                     <div class="form-group">
@@ -271,15 +198,12 @@
 					</div>
                     <div class="form-group">
                         <label>Service</label>
-						<select class="selectpicker" name="Service_name" data-width='100%' id="select-fournisseur">
+						<select class="selectpicker" data-width='100%' name="Service_name">
                             <option value="">--Sélectionner le service--</option>
-                            <option value="AAA">AAA</option>
-                            <option value="AAB">AAB</option>
-                            <option value="AAC">AAC</option>
-                            <option value="ABA">ABA</option>
-                            <option value="ABB">ABB</option>
-                            <option value="ABC">ABC</option>
-                        </select>                        
+							@foreach ($services as $service)
+								<option value="{{$service->id}}">{{$service->Service_name}}</option>								
+							@endforeach
+                        </select>                            
 					</div>						
 				</div>
 				<div class="modal-footer">
@@ -364,7 +288,7 @@
 </div>
 </div>
 <!-- Edit Modal HTML -->
-@if ($errors->any())
+					@if ($errors->any())
 						<div class="alert alert-danger">
 							<strong>Whoops!</strong> Il y a eu quelques problèmes avec votre entrée.<br><br>
 							<ul>
@@ -377,7 +301,7 @@
 
 <!-- Delete Modal HTML -->
 @foreach ($bills as $bill)
-	<x-bill-delete id="{{ 'delete-bill-' . $bill->id }}" :bill="$bill"/> 
+	<x-bill-delete id="{{ 'delete-bill-' . $bill->id }}" :bill="$bill" />
 @endforeach
 
 <!-- Delete bills HTML -->

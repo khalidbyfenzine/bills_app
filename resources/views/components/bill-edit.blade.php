@@ -11,8 +11,17 @@
 				<div class="modal-body">					
 					<div class="form-group">
 						<label>Fournisseur</label>
-						<input type="text" value="{{ $bill->Supplier_name }}" name="Supplier_name" class="form-control" required>
-					</div>
+                        <select class="selectpicker" data-width='100%' name="Supplier_name">
+                            <option value="">--Sélectionner le fournisseur--</option>
+							@foreach ($suppliers as $supplier)
+                            @if($bill->Supplier_name == $supplier->Supplier_name )
+                            <option value="{{$supplier->id}}" selected>{{$supplier->Supplier_name}}</option>								
+                            @else
+                            <option value="{{$supplier->id}}">{{$supplier->Supplier_name}}</option>								
+                            @endif
+							@endforeach
+                        </select> 
+                    </div>
                     <div class="form-group">
 						<label>N°Facture</label>
 						<input type="text" value="{{ $bill->Bill_number }}" name="Bill_number" class="form-control" required>
@@ -35,7 +44,16 @@
 					</div>
                     <div class="form-group">
 						<label>Service</label>
-						<input type="text" value="{{ $bill->Service_name }}" name="Service_name" class="form-control" required>
+                        <select class="selectpicker" data-width='100%' name="Service_name">
+                            <option value="">--Sélectionner le service--</option>
+							@foreach ($services as $service)
+                            @if($bill->Service_name == $service->Service_name )
+                            <option value="{{$service->id}}" selected>{{$service->Service_name}}</option>								
+                            @else
+                            <option value="{{$service->id}}">{{$service->Service_name}}</option>								
+                            @endif
+							@endforeach
+                        </select> 
 					</div>								
 				</div>
 				<div class="modal-footer">

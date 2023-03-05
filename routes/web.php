@@ -25,3 +25,5 @@ Route::delete('/selected-bills',[BillController::class,'deletechecked'])->name('
 Route::resource('bills', BillController::class);
 Route::resource('supplier', SupplierController::class);
 Route::resource('service', ServiceController::class);
+Route::get('/export_bill', [BillController::class, 'export_bill'])->name('export_bill');
+Route::get('/search', [BillController::class,'search']);
