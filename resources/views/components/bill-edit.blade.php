@@ -15,9 +15,9 @@
                             <option value="">--Sélectionner le fournisseur--</option>
 							@foreach ($suppliers as $supplier)
                             @if($bill->Supplier_name == $supplier->Supplier_name )
-                            <option value="{{$supplier->id}}" selected>{{$supplier->Supplier_name}}</option>								
+                            <option value="{{$supplier->Supplier_name}}" selected>{{$supplier->Supplier_name}}</option>								
                             @else
-                            <option value="{{$supplier->id}}">{{$supplier->Supplier_name}}</option>								
+                            <option value="{{$supplier->Supplier_name}}">{{$supplier->Supplier_name}}</option>								
                             @endif
 							@endforeach
                         </select> 
@@ -48,9 +48,9 @@
                             <option value="">--Sélectionner le service--</option>
 							@foreach ($services as $service)
                             @if($bill->Service_name == $service->Service_name )
-                            <option value="{{$service->id}}" selected>{{$service->Service_name}}</option>								
+                            <option value="{{$service->Service_name}}" selected>{{$service->Service_name}}</option>								
                             @else
-                            <option value="{{$service->id}}">{{$service->Service_name}}</option>								
+                            <option value="{{$service->Service_name}}">{{$service->Service_name}}</option>								
                             @endif
 							@endforeach
                         </select> 

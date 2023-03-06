@@ -17,9 +17,22 @@ class BillController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bills = Bill::paginate(20);
+        $search = $request->get('search');
+        if ($search == '')
+            $bills = Bill::paginate(20);
+        else
+        {
+            $bills = Bill::where('Supplier_name', 'like', '%' . $search . '%')
+                ->orWhere('Bill_number', 'like', '%' . $search . '%')
+                ->orWhere('Amount', 'like', '%' . $search . '%')
+                ->orWhere('Bill_date', 'like', '%' . $search . '%')
+                ->orWhere('Deposit_date', 'like', '%' . $search . '%')
+                ->orWhere('Due_date', 'like', '%' . $search . '%')
+                ->orWhere('Service_name', 'like', '%' . $search . '%')
+                ->paginate(20);
+        }
         $suppliers =  Supplier::all();
         $services =  Service::all();
         return view('bills.index', compact('bills','suppliers','services'))->with(request()->input('page'));
@@ -142,27 +155,5 @@ class BillController extends Controller
         Bill::whereIn('id',$ids)->delete();
         return redirect()->route('bills.index')
                         ->with('success','Product deleted successfully');
-    }
-    public function search(Request $request)
-    {
-        return ($request->query);
-        $bills = Bill::where('Bill_number','LIKE','%'.$request->query.'%')->get();
-
-        return view('bills.index',compact('bills'));
-    }
-
-    public function search2(Request $request)
-    {
-        $bills = Bill::where([
-            ['Bill_number', '!=', Null],
-            [function ($query) use ($request) {
-                if (($term = $request->term)) {
-                    $query->orWhere('Bill_number', 'LIKE', '%' .$term. '%')->get();
-                }
-            }]
-        ])
-            ->orderBy("id");
-
-            return view('bills.index', compact('bills'));
     }
 }

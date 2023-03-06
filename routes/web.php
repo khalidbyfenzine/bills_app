@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
     return view('welcome'); 
 });*/
 
-Route::get('/', [BillController::class, 'index']);
+Route::get('/', [BillController::class, 'index'])->name('bill.index');
 Route::delete('/selected-bills',[BillController::class,'deletechecked'])->name('bill.deleteSelected');
 Route::resource('bills', BillController::class);
 Route::resource('supplier', SupplierController::class);

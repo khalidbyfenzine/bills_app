@@ -16,10 +16,13 @@ class ServiceSeeder extends Seeder
         DB::table('service')->insert(
             [
                 [
-                    'Service_name' => 'testService'
+                    'Service_name' => 'Appro'
                 ],
                 [
-                    'Service_name' => 'testService2'
+                    'Service_name' => 'Materiel'
+                ],
+                [
+                    'Service_name' => 'Technique'
                 ]
             ]
         );
