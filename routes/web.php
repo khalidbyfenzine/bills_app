@@ -19,8 +19,12 @@ use Illuminate\Support\Facades\Route;
 /*Route::get('/', function () {
     return view('welcome'); 
 });*/
+Auth::routes();
 
-Route::get('/', [BillController::class, 'index'])->name('bill.index');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/bill', [BillController::class, 'index'])->name('bill.index');
 Route::delete('/selected-bills',[BillController::class,'deletechecked'])->name('bill.deleteSelected');
 Route::resource('bills', BillController::class);
 Route::resource('supplier', SupplierController::class);

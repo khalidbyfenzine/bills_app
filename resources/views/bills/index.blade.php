@@ -1,4 +1,4 @@
-@extends('bills.layout')
+@extends('bills.layou')
 
 @section('content')
 

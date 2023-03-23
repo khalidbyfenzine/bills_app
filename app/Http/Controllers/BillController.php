@@ -21,7 +21,7 @@ class BillController extends Controller
     {
         $search = $request->get('search');
         if ($search == '')
-            $bills = Bill::paginate(20);
+            $bills = Bill::paginate(100);
         else
         {
             $bills = Bill::where('Supplier_name', 'like', '%' . $search . '%')
