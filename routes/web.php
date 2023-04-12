@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 });*/
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [BillController::class, 'index'])->name('bill.index');
 
 
 Route::get('/bill', [BillController::class, 'index'])->name('bill.index');
@@ -31,3 +31,4 @@ Route::resource('supplier', SupplierController::class);
 Route::resource('service', ServiceController::class);
 Route::get('/export_bill', [BillController::class, 'export_bill'])->name('export_bill');
 Route::get('/search', [BillController::class,'search']);
+Route::post('/select', [BillController::class, 'getDate']);

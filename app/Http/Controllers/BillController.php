@@ -8,6 +8,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Exports\BillsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use DB;
 
 
 class BillController extends Controller
@@ -37,6 +38,16 @@ class BillController extends Controller
         $services =  Service::all();
         return view('bills.index', compact('bills','suppliers','services'))->with(request()->input('page'));
     }
+
+    public function getDate(Request $request){
+        $suppliers =  Supplier::all();
+        $services =  Service::all();
+        $bills = Bill::whereBetween('Bill_date', [$request->start_date, $request->end_date])
+        ->paginate(20);
+  
+        return view('bills.index', compact('bills','suppliers','services'))->with(request()->input('page'));
+    }
+
 
     public function export_bill()
     {

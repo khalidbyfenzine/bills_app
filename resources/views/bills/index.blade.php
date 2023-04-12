@@ -33,6 +33,16 @@
 							
 					</div>
 				</div>
+				<div class="my-2">
+                    <form action="/select" method="POST">
+						{{ csrf_field() }}
+                        <div class="input-group mb-2">
+                            <input type="date" class="form-control" name="start_date">
+                            <input type="date" class="form-control" name="end_date">
+                            <button class="btn btn-success" type="submit">Chercher</button>
+                        </div>
+                    </form>
+                </div>
 			</div>
 			
 			
